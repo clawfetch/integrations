@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "langchain-clawfetch"
+version = "0.1.0"
+description = "LangChain tools for ClawFetch — pay-per-call web intelligence for AI agents (x402, USDC on Base)"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+keywords = ["langchain", "clawfetch", "x402", "web-scraping", "ai-agents", "tools"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "clawfetch>=0.2.2,<0.3",
+    "langchain-core>=0.3,<2",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "pytest-asyncio>=0.24"]
+
+[project.urls]
+Homepage = "https://api.clawfetch.ai"
+
+[tool.hatch.build.targets.wheel]
+packages = ["langchain_clawfetch"]
+
+[tool.hatch.build.targets.sdist]
+include = ["langchain_clawfetch/", "tests/", "README.md", "CHANGELOG.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
