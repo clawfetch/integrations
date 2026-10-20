@@ -1,0 +1,62 @@
+{
+  "name": "@clawfetch/ai-sdk",
+  "version": "0.1.0",
+  "description": "Vercel AI SDK tools for ClawFetch — pay-per-call web intelligence for AI agents (x402, USDC on Base)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "test:live": "vitest run --config vitest.live.config.ts",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "keywords": [
+    "clawfetch",
+    "x402",
+    "web-scraping",
+    "ai-agents",
+    "tools",
+    "usdc",
+    "base",
+    "ai-sdk",
+    "vercel-ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clawfetch/integrations.git"
+  },
+  "homepage": "https://api.clawfetch.ai",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@clawfetch/sdk": "^0.2.2"
+  },
+  "peerDependencies": {
+    "ai": "^7.0.0",
+    "zod": "^3.25.76 || ^4.1.8"
+  },
+  "devDependencies": {
+    "ai": "^7.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.2",
+    "@types/node": "^22.0.0",
+    "zod": "^4.1.8"
+  }
+}
