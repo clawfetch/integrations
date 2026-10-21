@@ -80,6 +80,10 @@ class ParseInput(BaseModel):
     )
 
 
+class CompanyInput(BaseModel):
+    domain: str = Field(description='Company domain (e.g. "stripe.com") or any URL on the site.')
+
+
 class DomainsCheckInput(BaseModel):
     domains: List[str] = Field(description="Fully qualified domain names to check, e.g. ['acme.ai', 'acme.com'] (max 20).")
 
@@ -206,6 +210,19 @@ class ClawFetchParse(_ClawFetchTool):
         return result.get("markdown") or ""
 
 
+class ClawFetchCompany(_ClawFetchTool):
+    name: str = "clawfetch_company"
+    description: str = (
+        "Company profile from a domain: name, description, logo, social profiles, contact emails and "
+        "phones, address, tech stack and key pages (about, careers, pricing, docs). Deterministic, "
+        "no LLM. Costs $0.02 USDC per call."
+    )
+    args_schema: Type[BaseModel] = CompanyInput
+
+    def _invoke(self, client: Any, domain: str) -> Any:
+        return client.company(domain)
+
+
 class ClawFetchDomainsCheck(_ClawFetchTool):
     name: str = "clawfetch_domains_check"
     description: str = (
@@ -242,6 +259,7 @@ TOOL_CLASSES = (
     ClawFetchExtract,
     ClawFetchResearch,
     ClawFetchParse,
+    ClawFetchCompany,
     ClawFetchDomainsCheck,
     ClawFetchDomainsSuggest,
 )

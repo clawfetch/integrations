@@ -57,6 +57,7 @@ Every tool supports `invoke` and `ainvoke`. Async calls use `AsyncClawFetch`.
 | `ClawFetchExtract` | `clawfetch_extract` | $0.008 | Typed JSON from 17 supported sites |
 | `ClawFetchResearch` | `clawfetch_research` | $0.02 | Web search plus source texts for citations |
 | `ClawFetchParse` | `clawfetch_parse` | $0.005 | Office document or PDF at a URL to Markdown (no OCR) |
+| `ClawFetchCompany` | `clawfetch_company` | $0.02 | Company profile from a domain: socials, emails, phones, tech stack, key pages |
 | `ClawFetchDomainsCheck` | `clawfetch_domains_check` | $0.003 | Domain availability |
 | `ClawFetchDomainsSuggest` | `clawfetch_domains_suggest` | $0.003 | Generate and check domain names from keywords |
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "langchain-clawfetch"
-version = "0.1.0"
+version = "0.2.0"
 description = "LangChain tools for ClawFetch — pay-per-call web intelligence for AI agents (x402, USDC on Base)"
 readme = "README.md"
 license = "MIT"
@@ -18,7 +18,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "clawfetch>=0.2.2,<0.3",
+    "clawfetch>=0.3.0,<0.4",
     "langchain-core>=0.3,<2",
 ]
 

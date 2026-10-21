@@ -2,6 +2,7 @@ import { tool, type Tool } from 'ai';
 import { z } from 'zod';
 import {
   ClawFetch,
+  type CompanyResult,
   type DomainCheckResult,
   type DomainSuggestResult,
   type ExtractResult,
@@ -51,6 +52,10 @@ const parseDocumentInput = z.object({
   format: z.string().optional().describe('Format hint such as "csv" when it cannot be detected'),
 });
 
+const enrichCompanyInput = z.object({
+  domain: z.string().min(1).describe('Company domain (e.g. "stripe.com") or any URL on the site'),
+});
+
 const checkDomainsInput = z.object({
   domains: z.array(z.string()).min(1).max(20).describe('Fully qualified domains, e.g. ["example.com"]'),
 });
@@ -71,6 +76,7 @@ export type ClawFetchTools = {
   extractData: ClawFetchTool<z.infer<typeof extractDataInput>, ExtractResult>;
   researchTopic: ClawFetchTool<z.infer<typeof researchTopicInput>, ResearchResult>;
   parseDocument: ClawFetchTool<z.infer<typeof parseDocumentInput>, ParseResult>;
+  enrichCompany: ClawFetchTool<z.infer<typeof enrichCompanyInput>, CompanyResult>;
   checkDomains: ClawFetchTool<z.infer<typeof checkDomainsInput>, DomainCheckResult>;
   suggestDomains: ClawFetchTool<z.infer<typeof suggestDomainsInput>, DomainSuggestResult>;
 };
@@ -126,6 +132,13 @@ export function clawfetchTools(options: ClawFetchToolsOptions = {}): ClawFetchTo
         `Convert a document at a URL (pdf, docx, pptx, xlsx, odt, ods, odp, rtf, epub, csv, doc, ppt) to Markdown. No OCR: scanned PDFs fail. Costs $0.005 per call (${PAYMENT_NOTE}).`,
       inputSchema: parseDocumentInput,
       execute: ({ url, format }) => client.parse(url, { format }),
+    }),
+
+    enrichCompany: tool({
+      description:
+        `Company profile from a domain: name, description, logo, social profiles, contact emails and phones, address, tech stack and key pages. Deterministic, no LLM. Costs $0.02 per call (${PAYMENT_NOTE}).`,
+      inputSchema: enrichCompanyInput,
+      execute: ({ domain }) => client.company(domain),
     }),
 
     checkDomains: tool({

@@ -49,6 +49,7 @@ await generateText({ model, tools: { fetchUrl, researchTopic }, prompt });
 | `extractData` | `POST /extract` | $0.008 | Structured JSON from 17 site extractors |
 | `researchTopic` | `POST /research` | $0.02 | Web search plus top result pages |
 | `parseDocument` | `POST /parse` | $0.005 | Document (pdf, docx, xlsx, …) to Markdown |
+| `enrichCompany` | `POST /company` | $0.02 | Company profile from a domain: socials, emails, tech stack, key pages |
 | `checkDomains` | `POST /domains/check` | $0.003 | Domain availability (WHOIS) |
 | `suggestDomains` | `POST /domains/suggest` | $0.003 | Domain ideas from keywords, checked |
 
