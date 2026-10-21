@@ -32,7 +32,7 @@ Or bind to any tool-calling chat model:
 const model = new ChatOpenAI({ model: 'gpt-5' }).bindTools(clawfetchTools({ privateKey: '0x…' }));
 ```
 
-Each tool is also exported as a factory (`fetchUrlTool`, `renderPageTool`, `extractDataTool`, `researchTopicTool`, `parseDocumentTool`, `checkDomainsTool`, `suggestDomainsTool`) taking the same options. Tools return the API response as a JSON string.
+Each tool is also exported as a factory (`fetchUrlTool`, `renderPageTool`, `extractDataTool`, `researchTopicTool`, `parseDocumentTool`, `enrichCompanyTool`, `checkDomainsTool`, `suggestDomainsTool`) taking the same options. Tools return the API response as a JSON string.
 
 ### Options
 
@@ -51,6 +51,7 @@ Each tool is also exported as a factory (`fetchUrlTool`, `renderPageTool`, `extr
 | `extract_data` | `POST /extract` | $0.008 | Structured JSON from 17 site extractors |
 | `research_topic` | `POST /research` | $0.02 | Web search plus top result pages |
 | `parse_document` | `POST /parse` | $0.005 | Document (pdf, docx, xlsx, …) to Markdown |
+| `enrich_company` | `POST /company` | $0.02 | Company profile from a domain: socials, emails, tech stack, key pages |
 | `check_domains` | `POST /domains/check` | $0.003 | Domain availability (WHOIS) |
 | `suggest_domains` | `POST /domains/suggest` | $0.003 | Domain ideas from keywords, checked |
 

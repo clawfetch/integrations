@@ -15,6 +15,7 @@ from crewai_clawfetch import (
     ClawFetchParseTool,
     ClawFetchRenderTool,
     ClawFetchResearchTool,
+    ClawFetchCompanyTool,
     clawfetch_tools,
 )
 
@@ -33,6 +34,8 @@ CASES = [
      {"query": "x402", "sources": 0, "results": []}, json.dumps({"query": "x402", "sources": 0, "results": []})),
     (ClawFetchParseTool, {"url": "https://a.b/x.docx"}, "parse", ("https://a.b/x.docx",), {"format": None},
      {"markdown": "# Doc", "format": "docx", "chars": 5}, "# Doc"),
+    (ClawFetchCompanyTool, {"domain": "vercel.com"}, "company", ("vercel.com",), {},
+     {"domain": "vercel.com", "name": "Vercel"}, json.dumps({"domain": "vercel.com", "name": "Vercel"})),
     (ClawFetchDomainsCheckTool, {"domains": ["a.ai"]}, "domains_check", (["a.ai"],), {},
      {"checked": 1, "results": [{"domain": "a.ai", "available": True}]},
      json.dumps({"checked": 1, "results": [{"domain": "a.ai", "available": True}]})),
@@ -69,7 +72,7 @@ def test_clawfetch_tools_shares_client_and_metadata():
     tools = clawfetch_tools(client=client, max_chars=500)
     assert [t.name for t in tools] == [
         "clawfetch_fetch", "clawfetch_render", "clawfetch_extract", "clawfetch_research",
-        "clawfetch_parse", "clawfetch_domains_check", "clawfetch_domains_suggest",
+        "clawfetch_parse", "clawfetch_company", "clawfetch_domains_check", "clawfetch_domains_suggest",
     ]
     for t in tools:
         assert isinstance(t, BaseTool)

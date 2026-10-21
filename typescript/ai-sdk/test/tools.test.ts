@@ -14,6 +14,7 @@ function mockClient() {
     extract: vi.fn(async (url: string) => ({ url, extractor: 'github', data: { stars: 1 } })),
     research: vi.fn(async (topic: string) => ({ topic, summary: '', sources: [] })),
     parse: vi.fn(async () => ({ markdown: '# Doc', format: 'pdf', chars: 5 })),
+    company: vi.fn(async (domain: string) => ({ domain, name: 'Vercel', socials: {}, techStack: [] })),
     domainsCheck: vi.fn(async (domains: string[]) => ({ domains: domains.map(domain => ({ domain, available: true })) })),
     domainsSuggest: vi.fn(async () => ({ query: 'agent grid', generated: 1, checked: 1, suggestions: [] })),
   };
@@ -35,11 +36,11 @@ describe('clawfetchTools', () => {
   it('exposes one tool per paid endpoint, each stating its price', () => {
     const { tools } = setup();
     expect(Object.keys(tools).sort()).toEqual(
-      ['checkDomains', 'extractData', 'fetchUrl', 'parseDocument', 'renderPage', 'researchTopic', 'suggestDomains'],
+      ['checkDomains', 'enrichCompany', 'extractData', 'fetchUrl', 'parseDocument', 'renderPage', 'researchTopic', 'suggestDomains'],
     );
     const prices: Record<string, string> = {
       fetchUrl: '$0.001', renderPage: '$0.005', extractData: '$0.008', researchTopic: '$0.02',
-      parseDocument: '$0.005', checkDomains: '$0.003', suggestDomains: '$0.003',
+      parseDocument: '$0.005', enrichCompany: '$0.02', checkDomains: '$0.003', suggestDomains: '$0.003',
     };
     for (const [name, t] of Object.entries(tools)) {
       expect(t.description).toContain(`Costs ${prices[name]} per call`);
@@ -80,6 +81,13 @@ describe('clawfetchTools', () => {
     const out = await tools.parseDocument.execute({ url: 'https://example.com/a.pdf' }, opts);
     expect(client.parse).toHaveBeenCalledWith('https://example.com/a.pdf', { format: undefined });
     expect(out).toMatchObject({ markdown: '# Doc' });
+  });
+
+  it('enrichCompany → client.company(domain)', async () => {
+    const { client, tools } = setup();
+    const out = await tools.enrichCompany.execute({ domain: 'vercel.com' }, opts);
+    expect(client.company).toHaveBeenCalledWith('vercel.com');
+    expect(out).toMatchObject({ name: 'Vercel' });
   });
 
   it('checkDomains → client.domainsCheck', async () => {
@@ -124,7 +132,7 @@ describe('clawfetchTools', () => {
 
     // The model was offered JSON-schema tool definitions for every endpoint.
     const offered = model.doGenerateCalls[0].tools?.map(t => t.name).sort();
-    expect(offered).toHaveLength(7);
+    expect(offered).toHaveLength(8);
   });
 });
 

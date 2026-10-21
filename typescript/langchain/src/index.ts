@@ -111,6 +111,21 @@ export function parseDocumentTool(options: ClawFetchToolsOptions = {}) {
   );
 }
 
+export function enrichCompanyTool(options: ClawFetchToolsOptions = {}) {
+  const client = createClawFetchClient(options);
+  return tool(
+    async ({ domain }) => json(await client.company(domain)),
+    {
+      name: 'enrich_company',
+      description:
+        `Company profile from a domain: name, description, logo, social profiles, contact emails and phones, address, tech stack and key pages. Deterministic, no LLM. Costs $0.02 per call (${PAYMENT_NOTE}).`,
+      schema: z.object({
+        domain: z.string().min(1).describe('Company domain (e.g. "stripe.com") or any URL on the site'),
+      }),
+    },
+  );
+}
+
 export function checkDomainsTool(options: ClawFetchToolsOptions = {}) {
   const client = createClawFetchClient(options);
   return tool(
@@ -152,6 +167,7 @@ export function clawfetchTools(options: ClawFetchToolsOptions = {}): StructuredT
     extractDataTool(shared),
     researchTopicTool(shared),
     parseDocumentTool(shared),
+    enrichCompanyTool(shared),
     checkDomainsTool(shared),
     suggestDomainsTool(shared),
   ];

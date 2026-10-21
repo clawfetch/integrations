@@ -47,6 +47,7 @@ response = await agent.run("What's new on news.ycombinator.com?")
 | `extract(url, type=None)` | $0.008 | Typed JSON from 17 supported sites |
 | `research(query, max_results=None)` | $0.02 | Web search plus source texts for citations |
 | `parse(url, format=None)` | $0.005 | Office document or PDF at a URL to Markdown (no OCR) |
+| `company(domain)` | $0.02 | Company profile from a domain: socials, emails, phones, tech stack, key pages |
 | `domains_check(domains)` | $0.003 | Domain availability |
 | `domains_suggest(keywords, tlds=None, max_check=None)` | $0.003 | Generate and check domain names from keywords |
 

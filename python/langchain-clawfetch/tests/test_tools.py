@@ -13,6 +13,7 @@ from langchain_clawfetch import (
     ClawFetchExtract,
     ClawFetchFetch,
     ClawFetchParse,
+    ClawFetchCompany,
     ClawFetchRender,
     ClawFetchResearch,
     ClawFetchToolkit,
@@ -33,6 +34,8 @@ CASES = [
      {"query": "x402", "sources": 0, "results": []}, json.dumps({"query": "x402", "sources": 0, "results": []})),
     (ClawFetchParse, {"url": "https://a.b/x.docx"}, "parse", ("https://a.b/x.docx",), {"format": None},
      {"markdown": "# Doc", "format": "docx", "chars": 5}, "# Doc"),
+    (ClawFetchCompany, {"domain": "vercel.com"}, "company", ("vercel.com",), {},
+     {"domain": "vercel.com", "name": "Vercel"}, json.dumps({"domain": "vercel.com", "name": "Vercel"})),
     (ClawFetchDomainsCheck, {"domains": ["a.ai"]}, "domains_check", (["a.ai"],), {},
      {"checked": 1, "available": 1, "taken": 0, "results": [{"domain": "a.ai", "available": True}]},
      json.dumps({"checked": 1, "available": 1, "taken": 0, "results": [{"domain": "a.ai", "available": True}]})),
@@ -98,7 +101,7 @@ def test_tool_metadata():
     tools = ClawFetchToolkit(client=client, async_client=aclient).get_tools()
     assert [t.name for t in tools] == [
         "clawfetch_fetch", "clawfetch_render", "clawfetch_extract", "clawfetch_research",
-        "clawfetch_parse", "clawfetch_domains_check", "clawfetch_domains_suggest",
+        "clawfetch_parse", "clawfetch_company", "clawfetch_domains_check", "clawfetch_domains_suggest",
     ]
     for t in tools:
         assert "$0." in t.description and "USDC" in t.description

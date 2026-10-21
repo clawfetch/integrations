@@ -12,6 +12,7 @@ function mockClient() {
     extract: vi.fn(async (url: string) => ({ url, extractor: 'github', data: { stars: 1 } })),
     research: vi.fn(async (topic: string) => ({ topic, summary: '', sources: [] })),
     parse: vi.fn(async () => ({ markdown: '# Doc', format: 'pdf', chars: 5 })),
+    company: vi.fn(async (domain: string) => ({ domain, name: 'Vercel', socials: {}, techStack: [] })),
     domainsCheck: vi.fn(async (domains: string[]) => ({ domains: domains.map(domain => ({ domain, available: true })) })),
     domainsSuggest: vi.fn(async () => ({ query: 'agent grid', generated: 1, checked: 1, suggestions: [] })),
   };
@@ -33,7 +34,7 @@ describe('clawfetchTools', () => {
     const { tools } = setup();
     const prices: Record<string, string> = {
       fetch_url: '$0.001', render_page: '$0.005', extract_data: '$0.008', research_topic: '$0.02',
-      parse_document: '$0.005', check_domains: '$0.003', suggest_domains: '$0.003',
+      parse_document: '$0.005', enrich_company: '$0.02', check_domains: '$0.003', suggest_domains: '$0.003',
     };
     expect(tools.map(t => t.name).sort()).toEqual(Object.keys(prices).sort());
     for (const t of tools) expect(t.description).toContain(`Costs ${prices[t.name]} per call`);
@@ -75,6 +76,13 @@ describe('clawfetchTools', () => {
     expect(JSON.parse(out)).toMatchObject({ markdown: '# Doc' });
   });
 
+  it('enrich_company → client.company(domain)', async () => {
+    const { client, byName } = setup();
+    const out = await byName.enrich_company.invoke({ domain: 'vercel.com' });
+    expect(client.company).toHaveBeenCalledWith('vercel.com');
+    expect(JSON.parse(out)).toMatchObject({ name: 'Vercel' });
+  });
+
   it('check_domains → client.domainsCheck', async () => {
     const { client, byName } = setup();
     const out = await byName.check_domains.invoke({ domains: ['example.com'] });
@@ -111,7 +119,7 @@ describe('clawfetchTools', () => {
 
   it('shares one client across all tools', () => {
     vi.stubEnv('CLAWFETCH_PRIVATE_KEY', DUMMY_KEY);
-    expect(clawfetchTools()).toHaveLength(7);
+    expect(clawfetchTools()).toHaveLength(8);
   });
 
   it('individual tool factories work standalone', async () => {

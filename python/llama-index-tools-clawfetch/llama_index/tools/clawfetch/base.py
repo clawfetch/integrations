@@ -38,6 +38,7 @@ class ClawFetchToolSpec(BaseToolSpec):
         "extract",
         "research",
         "parse",
+        "company",
         "domains_check",
         "domains_suggest",
     ]
@@ -103,6 +104,14 @@ class ClawFetchToolSpec(BaseToolSpec):
             format: Optional format override (doc, docx, odt, pdf, ppt, pptx, rtf, epub, xlsx, ods, odp, csv).
         """
         return _truncate(self.client.parse(url, format=format).get("markdown") or "", self.max_chars)
+
+    def company(self, domain: str) -> str:
+        """Company profile from a domain: name, description, logo, social profiles, contact emails and phones, address, tech stack and key pages (about, careers, pricing, docs). Deterministic, no LLM. Costs $0.02 USDC per call.
+
+        Args:
+            domain: Company domain (e.g. "stripe.com") or any URL on the site.
+        """
+        return self._json(self.client.company(domain))
 
     def domains_check(self, domains: List[str]) -> str:
         """Check whether specific domain names are available to register. Returns JSON with a result per domain (available true/false, or null with an error). Costs $0.003 USDC per call.

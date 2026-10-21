@@ -1,6 +1,7 @@
 """CrewAI integration for ClawFetch — pay-per-call web intelligence for AI agents."""
 
 from crewai_clawfetch.tools import (
+    ClawFetchCompanyTool,
     ClawFetchDomainsCheckTool,
     ClawFetchDomainsSuggestTool,
     ClawFetchExtractTool,
@@ -17,8 +18,9 @@ __all__ = [
     "ClawFetchExtractTool",
     "ClawFetchResearchTool",
     "ClawFetchParseTool",
+    "ClawFetchCompanyTool",
     "ClawFetchDomainsCheckTool",
     "ClawFetchDomainsSuggestTool",
     "clawfetch_tools",
 ]
-__version__ = "0.1.0"
+__version__ = "0.2.0"

@@ -25,6 +25,8 @@ CASES = [
      {"query": "x402", "sources": 0, "results": []}, json.dumps({"query": "x402", "sources": 0, "results": []})),
     ("parse", {"url": "https://a.b/x.docx"}, "parse", ("https://a.b/x.docx",), {"format": None},
      {"markdown": "# Doc", "format": "docx", "chars": 5}, "# Doc"),
+    ("company", {"domain": "vercel.com"}, "company", ("vercel.com",), {},
+     {"domain": "vercel.com", "name": "Vercel"}, json.dumps({"domain": "vercel.com", "name": "Vercel"})),
     ("domains_check", {"domains": ["a.ai"]}, "domains_check", (["a.ai"],), {},
      {"checked": 1, "results": [{"domain": "a.ai", "available": None, "error": "timeout"}]},
      json.dumps({"checked": 1, "results": [{"domain": "a.ai", "available": None, "error": "timeout"}]})),
@@ -57,12 +59,12 @@ def test_tool_list_metadata():
     tools = ClawFetchToolSpec(client=MagicMock(spec=ClawFetch)).to_tool_list()
     assert issubclass(ClawFetchToolSpec, BaseToolSpec)
     assert [t.metadata.name for t in tools] == [
-        "fetch", "render", "extract", "research", "parse", "domains_check", "domains_suggest",
+        "fetch", "render", "extract", "research", "parse", "company", "domains_check", "domains_suggest",
     ]
     for t in tools:
         assert isinstance(t, FunctionTool)
         assert "$0." in t.metadata.description and "USDC" in t.metadata.description
-    schema = tools[6].metadata.get_parameters_dict()
+    schema = tools[7].metadata.get_parameters_dict()
     assert schema["required"] == ["keywords"]
     assert schema["properties"]["keywords"]["type"] == "array"
 
